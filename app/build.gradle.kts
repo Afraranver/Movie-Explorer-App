@@ -1,8 +1,29 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.dagger.hilt.android)
+    id("org.jetbrains.kotlin.kapt")
+    id("kotlin-parcelize")
 }
+
+// Read credentials from local.properties
+val credentialsFile = rootProject.file("local.properties")
+val credentialProperties = Properties()
+
+if (credentialsFile.exists()) {
+    credentialProperties.load(FileInputStream(credentialsFile))
+} else {
+    throw GradleException("local.properties file is missing.")
+}
+
+// Access credentials
+val apiKey: String = credentialProperties.getProperty("TMDB_API_KEY")
+    ?: throw GradleException("API_KEY not found in local.properties")
+
 
 android {
     namespace = "com.example.movieexplorerapp"
@@ -16,6 +37,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+        buildConfigField("String", "SMALL_IMAGE_URL", "\"https://image.tmdb.org/t/p/w200\"")
+        buildConfigField("String", "LARGE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w500\"")
+        buildConfigField("String", "ORIGINAL_IMAGE_URL", "\"https://image.tmdb.org/t/p/original\"")
+        buildConfigField("String", "TMDB_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -28,15 +55,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
+
 }
 
 dependencies {
@@ -49,6 +78,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.runtime.android)
+    implementation(libs.androidx.paging.common.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,4 +87,28 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.logging.interceptor)
+
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.fragment)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    kapt(libs.hilt.compiler)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.accompanist.flowlayout)
+    implementation(libs.android.lottie.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.androidx.material)
+    implementation(libs.core)
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.material.icons.extended)
+    implementation (libs.accompanist.navigation.animation)
 }
