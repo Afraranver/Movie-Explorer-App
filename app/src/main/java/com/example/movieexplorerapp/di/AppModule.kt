@@ -3,6 +3,8 @@ package com.example.movieexplorerapp.di
 import com.example.movieexplorerapp.BuildConfig
 import com.example.movieexplorerapp.common.Constants
 import com.example.movieexplorerapp.data.remote.TMDbApiService
+import com.example.movieexplorerapp.data.repository.FirebaseAuthRepository
+import com.example.movieexplorerapp.domain.respository.AuthRepository
 import com.example.movieexplorerapp.domain.respository.TMDbRepository
 import com.example.movieexplorerapp.domain.use_case.UseCases
 import com.example.movieexplorerapp.domain.use_case.details.GetVideos
@@ -17,6 +19,7 @@ import com.example.movieexplorerapp.domain.use_case.top_rated.TopRatedMoviesList
 import com.example.movieexplorerapp.domain.use_case.top_rated.TopRatedMoviesPagingList
 import com.example.movieexplorerapp.domain.use_case.upcoming.UpcomingMoviesList
 import com.example.movieexplorerapp.domain.use_case.upcoming.UpcomingMoviesPagingList
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module

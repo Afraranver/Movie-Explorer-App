@@ -10,7 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.movieexplorerapp.presentation.dashboard.DashboardScreen
-import com.example.movieexplorerapp.presentation.login.LoginScreen
+import com.example.movieexplorerapp.presentation.login.AuthScreen
 import com.example.movieexplorerapp.presentation.login.LoginViewModel
 import com.example.movieexplorerapp.presentation.movie_details.MovieDetailsScreen
 import com.example.movieexplorerapp.presentation.movie_details.YoutubePlayerScreen
@@ -29,8 +29,13 @@ fun Navigation() {
         startDestination = if (loginState.sessionId == null) Screen.LoginScreen.route else Screen.Dashboard.route
     ) {
         // Login screen
-        composable(route = Screen.LoginScreen.route) {
-            LoginScreen(navController)
+        composable(route = Screen.AuthScreen.route) { backStackEntry ->
+            // Pass the `isSignUp` parameter based on some logic or navigation arguments
+            val isSignUp = backStackEntry.arguments?.getString("isSignUp")?.toBoolean() ?: false
+            AuthScreen(
+                isSignUp = isSignUp,
+                navController = navController
+            )
         }
 
         // Dashboard and other screens

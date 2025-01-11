@@ -2,6 +2,7 @@
 accompanistNavigationAnimation = "0.36.0"
 agp = "8.7.3"
 core = "11.0.1"
+firebaseBom = "33.7.0"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -29,6 +30,8 @@ hilt = "2.51.1"
 pagingCommonAndroid = "3.3.5"
 coil = "2.2.2"
 coroutines = "1.7.3"
+firebaseAuthKtx = "23.1.0"
+firebaseFirestoreKtx = "25.1.1"
 
 [libraries]
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
@@ -38,6 +41,8 @@ androidx-material = { module = "androidx.compose.material:material", version.ref
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 core = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "core" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -67,6 +72,8 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 androidx-paging-common-android = { group = "androidx.paging", name = "paging-common-android", version.ref = "pagingCommonAndroid" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,44 +1,37 @@
 package com.example.movieexplorerapp.presentation.login
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.State
 import androidx.lifecycle.viewModelScope
-import com.example.movieexplorerapp.data.remote.TMDbApiService
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val apiService: TMDbApiService
+    private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
     private val _loginState = mutableStateOf(LoginState())
     val loginState: State<LoginState> = _loginState
 
-    fun authenticate(username: String, password: String, apiKey: String) {
+    fun authenticate(username: String, password: String, isSignUp: Boolean = false) {
         viewModelScope.launch {
             _loginState.value = LoginState(isLoading = true)
 
             try {
-                // Step 1: Get Request Token
-                val tokenResponse = apiService.getRequestToken(apiKey)
-                val token = tokenResponse.request_token
-
-                // Step 2: Validate with Login
-                val validateResponse = apiService.validateWithLogin(
-                    apiKey, username, password, token
-                )
-
-                // Step 3: Create Session
-                val sessionResponse = apiService.createSession(apiKey, validateResponse.request_token)
-
-                // Update login state with session ID
-                _loginState.value = LoginState(sessionId = sessionResponse.session_id)
+                val authResult = if (isSignUp) {
+                    firebaseAuth.createUserWithEmailAndPassword(username, password).await()
+                } else {
+                    firebaseAuth.signInWithEmailAndPassword(username, password).await()
+                }
+                val userId = authResult.user?.uid
+                _loginState.value = LoginState(sessionId = userId)
             } catch (e: Exception) {
-                // Update login state with error message
-                _loginState.value = LoginState(error = e.localizedMessage ?: "An error occurred")
+                _loginState.value = LoginState(error = e.localizedMessage ?: "Authentication failed")
             }
         }
     }

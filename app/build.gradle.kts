@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.google.dagger.hilt.android)
     id("org.jetbrains.kotlin.kapt")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 // Read credentials from local.properties
@@ -80,6 +81,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.runtime.android)
     implementation(libs.androidx.paging.common.android)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -111,4 +114,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.material.icons.extended)
     implementation (libs.accompanist.navigation.animation)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
