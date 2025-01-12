@@ -1,17 +1,33 @@
 package com.example.movieexplorerapp.presentation.search_movie
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
@@ -20,7 +36,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.movieexplorerapp.presentation.dashboard.components.BottomNavigationBar
 import com.example.movieexplorerapp.presentation.dashboard.components.ErrorView
-import com.example.movieexplorerapp.presentation.dashboard.components.IsLoading
 import com.example.movieexplorerapp.presentation.movie_details.components.SearchBar
 import com.example.movieexplorerapp.presentation.search_movie.components.SearchEmpty
 import com.example.movieexplorerapp.presentation.search_movie.components.SearchMovieItemCard
@@ -33,15 +48,12 @@ fun SearchPageScreen(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
-    // Automatically request focus when screen is shown
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
-    // Cleanup focus when the screen is no longer in the composition
     DisposableEffect(Unit) {
         onDispose {
-            // Clear the focus and hide the keyboard when leaving the screen
             focusManager.clearFocus()
         }
     }
@@ -56,37 +68,71 @@ fun SearchPageScreen(
                 .padding(paddingValues)
                 .padding(20.dp)
         ) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(30.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+            // Search Card with Elevation and Animation
+            AnimatedVisibility(visible = true) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(10.dp, shape = RoundedCornerShape(30.dp)) // Add shadow for depth
+                        .background(MaterialTheme.colorScheme.surface) // Card background
+                        .animateContentSize() // Animate size changes
+                        .clickable {
+                            // Optionally add click event
+                        },
+                    shape = RoundedCornerShape(30.dp),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 8.dp
+                    ) // Add elevation for depth effect
                 ) {
-                    Box(
-                        modifier = Modifier.focusRequester(focusRequester)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
                     ) {
-                        SearchBar(
-                            onSearch = { state ->
-                                state.value.text.let { query ->
-                                    if (query.isNotBlank()) {
-                                        viewModel.searchMovie(query)
+                        Box(
+                            modifier = Modifier.focusRequester(focusRequester)
+                        ) {
+                            SearchBar(
+                                onSearch = { state ->
+                                    state.value.text.let { query ->
+                                        if (query.isNotBlank()) {
+                                            viewModel.searchMovie(query)
+                                        }
                                     }
-                                }
-                                viewModel.searchMovie(state.value.text)
-                            },
-                            onCancel = { viewModel.clearSearch() }
-                        )
+                                    viewModel.searchMovie(state.value.text)
+                                },
+                                onCancel = { viewModel.clearSearch() }
+                            )
+                        }
                     }
                 }
             }
 
+            // Animated loading, error, and empty states
             Box(modifier = Modifier.padding(top = 10.dp)) {
+                // Search item list
                 SearchItemList(viewModel, navController)
-                IsLoading(isLoading = viewModel.isLoading.value)
-                ErrorView(viewModel.apiError.value)
-                SearchEmpty(viewModel.listEmpty.value)
+
+                // Loading Animation (e.g., with a fade-in effect)
+                androidx.compose.animation.AnimatedVisibility(visible = viewModel.isLoading.value) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)  // Aligning the progress indicator in the center
+                            .scale(1.5f)  // Scales the progress indicator for better visibility
+                            .alpha(0.7f),  // Adding some transparency for better UX
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                // Error View with animation
+                androidx.compose.animation.AnimatedVisibility(visible = viewModel.apiError.value) {
+                    ErrorView(viewModel.apiError.value)
+                }
+
+                // Empty State with animation and style
+                androidx.compose.animation.AnimatedVisibility(visible = viewModel.listEmpty.value) {
+                    SearchEmpty(viewModel.listEmpty.value)
+                }
             }
         }
     }

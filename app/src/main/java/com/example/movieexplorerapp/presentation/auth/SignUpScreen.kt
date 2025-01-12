@@ -1,17 +1,21 @@
 package com.example.movieexplorerapp.presentation.auth
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -31,21 +35,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.movieexplorerapp.R
+import com.example.movieexplorerapp.common.UserPreferences
 import com.example.movieexplorerapp.presentation.Screen
+import com.example.movieexplorerapp.presentation.auth.components.CustomTextField
 
 @Composable
 fun SignUpScreen(
-    navController: NavHostController,
+    navController: NavController,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     var email by remember { mutableStateOf("") }
@@ -53,119 +61,189 @@ fun SignUpScreen(
     var confirmPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+    var confirmPasswordError by remember { mutableStateOf(false) }
 
     val authState = viewModel.authState.value
+    val context = LocalContext.current
+    val emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}".toRegex()
 
-    if (authState.isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.3f)),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(60.dp),
-                color = MaterialTheme.colorScheme.primary
-            )
+    // Handle auth state changes (loading, success, error)
+    LaunchedEffect(authState) {
+        when {
+            authState.isLoading -> {
+                // Show loading state
+            }
+            authState.isAuthenticated -> {
+                Toast.makeText(context, "Signed Up Successfully", Toast.LENGTH_SHORT).show()
+                val userPreferences = UserPreferences(context)
+                userPreferences.saveLoginState(true)
+                navController.navigate(Screen.Dashboard.route) {
+                    popUpTo(Screen.SignUpScreen.route) { inclusive = true }
+                }
+            }
+            authState.error != null -> {
+                Toast.makeText(context, authState.error, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
-    // Display error message if exists
-    LaunchedEffect(authState.error) {
-        authState.error?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp)
     ) {
-        // Logo and App Name
-        LogoWithAppName()
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Text(
-            text = "Create an Account",
-            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        // Email TextField
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
-
-        // Password TextField with visibility toggle
-        PasswordTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = "Password",
-            passwordVisible = passwordVisible,
-            onPasswordVisibilityChanged = { passwordVisible = it }
-        )
-
-        // Confirm Password TextField with visibility toggle
-        PasswordTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
-            label = "Confirm Password",
-            passwordVisible = confirmPasswordVisible,
-            onPasswordVisibilityChanged = { confirmPasswordVisible = it }
-        )
-
-        // Error Message for Password Mismatch
-        if (password.isNotEmpty() && confirmPassword.isNotEmpty() && password != confirmPassword) {
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            // Signup Title
             Text(
-                text = "Passwords do not match",
-                color = Color.Red,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(vertical = 8.dp)
+                text = "Create an Account",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center
             )
-        }
 
-        // Sign Up Button
-        Button(
-            onClick = {
-                if (password == confirmPassword) {
-                    viewModel.signUp(email, password)
-                } else {
-                    Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Email TextField
+            CustomTextField(
+                value = email,
+                onValueChange = {
+                    email = it
+                    emailError = false
+                },
+                label = "Email",
+                placeholder = "Enter your email",
+                isError = emailError
+            )
+            if (emailError) {
+                Text(
+                    text = "Please enter a valid email",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            // Password TextField
+            CustomTextField(
+                value = password,
+                onValueChange = {
+                    password = it
+                    passwordError = false
+                },
+                label = "Password",
+                placeholder = "Enter your password",
+                isPassword = true,
+                passwordVisible = passwordVisible,
+                onPasswordVisibilityChange = { passwordVisible = !passwordVisible },
+                isError = passwordError
+            )
+            if (passwordError) {
+                Text(
+                    text = "Password cannot be empty",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            // Confirm Password TextField
+            CustomTextField(
+                value = confirmPassword,
+                onValueChange = {
+                    confirmPassword = it
+                    confirmPasswordError = false
+                },
+                label = "Confirm Password",
+                placeholder = "Re-enter your password",
+                isPassword = true,
+                passwordVisible = confirmPasswordVisible,
+                onPasswordVisibilityChange = { confirmPasswordVisible = !confirmPasswordVisible },
+                isError = confirmPasswordError
+            )
+            if (confirmPasswordError) {
+                Text(
+                    text = "Password confirmation doesn't match",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            // Sign Up Button
+            Button(
+                onClick = {
+                    var isValid = true
+
+                    // Validate email
+                    if (email.isEmpty() || !emailPattern.matches(email)) {
+                        emailError = true
+                        isValid = false
+                    }
+
+                    // Validate password
+                    if (password.isEmpty()) {
+                        passwordError = true
+                        isValid = false
+                    }
+
+                    // Validate confirm password
+                    if (confirmPassword.isEmpty() || password != confirmPassword) {
+                        confirmPasswordError = true
+                        isValid = false
+                    }
+
+                    if (isValid) {
+                        viewModel.signUp(email, password)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .clip(MaterialTheme.shapes.large),
+                contentPadding = PaddingValues(vertical = 14.dp)
+            ) {
+                Text(
+                    text = "Sign Up",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            // Navigate back to Login Button
+            OutlinedButton(
+                onClick = {
+                    navController.popBackStack()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                contentPadding = PaddingValues(vertical = 14.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+            ) {
+                Text(
+                    text = "Already have an account? Login",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            // Show loading state
+            if (authState.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .height(56.dp)
-        ) {
-            Text("Sign Up")
-        }
-
-        // Navigate back to Login Button
-        OutlinedButton(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .height(56.dp)
-        ) {
-            Text("Already have an account? Login")
-        }
-
-        // Navigate to Dashboard after successful signup
-        if (authState.isAuthenticated) {
-            LaunchedEffect(Unit) {
-                navController.navigate(Screen.Dashboard.route)  // Navigate to the dashboard
             }
         }
     }

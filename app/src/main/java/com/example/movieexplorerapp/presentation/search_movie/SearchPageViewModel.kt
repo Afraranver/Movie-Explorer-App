@@ -47,6 +47,7 @@ class SearchPageViewModel @Inject constructor(val useCases: UseCases) : ViewMode
                         _isLoading.value = false
 
                     }
+
                     is NetworkResult.Failure -> {
                         _searchMoviePagingItems.clear()
                         _apiError.value = true

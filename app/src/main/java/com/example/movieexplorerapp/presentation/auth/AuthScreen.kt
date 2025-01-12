@@ -2,6 +2,7 @@ package com.example.movieexplorerapp.presentation.auth
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,11 +18,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.movieexplorerapp.R
+import com.example.movieexplorerapp.common.UserPreferences
 import com.example.movieexplorerapp.presentation.Screen
 import com.example.movieexplorerapp.presentation.auth.components.CustomTextField
 
@@ -44,14 +47,35 @@ fun AuthScreen(
     navController: NavController,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    var username by remember { mutableStateOf("") }
+    var emailId by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var usernameError by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     val authState = viewModel.authState.value
     val context = LocalContext.current
-    var passwordVisible by remember { mutableStateOf(false) }
+    val emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}".toRegex()
+
+    // Handle auth state changes (loading, success, error)
+    LaunchedEffect(authState) {
+        when {
+            authState.isLoading -> {
+                // Show loading state
+            }
+            authState.isAuthenticated -> {
+                Toast.makeText(context, "Logged In Successfully", Toast.LENGTH_SHORT).show()
+                val userPreferences = UserPreferences(context)
+                userPreferences.saveLoginState(true)
+                navController.navigate(Screen.Dashboard.route) {
+                    popUpTo(Screen.AuthScreen.route) { inclusive = true }
+                }
+            }
+            authState.error != null -> {
+                Toast.makeText(context, authState.error, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -68,36 +92,48 @@ fun AuthScreen(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             // Logo
-            Icon(
-                painter = painterResource(id = R.drawable.tmdb_logo_lg),
-                contentDescription = "TMDb Logo",
+            Image(
+                painter = painterResource(id = R.drawable.app_logo_e),
+                contentDescription = "App Logo",
                 modifier = Modifier.size(180.dp),
-                tint = MaterialTheme.colorScheme.primary
+                alignment = Alignment.Center,
+                contentScale = ContentScale.Fit // Adjust the content scale as needed
+            )
+
+            // Welcome Text
+            Text(
+                text = "Movie Explorer App",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center
             )
 
             Text(
-                text = "Welcome Back",
-                style = MaterialTheme.typography.titleLarge,
+                text = "Login",
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Username TextField
+            // Email TextField
             CustomTextField(
-                value = username,
+                value = emailId,
                 onValueChange = {
-                    username = it
-                    usernameError = false
+                    emailId = it
+                    // Reset email error when the value changes
+                    emailError = false
                 },
-                label = "Username",
-                placeholder = "Enter your username",
-                isError = usernameError
+                label = "Email",
+                placeholder = "Enter your email",
+                isError = emailError
             )
-            if (usernameError) {
+
+            // Show email error message if the email is invalid
+            if (emailError) {
                 Text(
-                    text = "Username cannot be empty",
+                    text = "Please enter a valid email",
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -128,27 +164,13 @@ fun AuthScreen(
             // Login Button
             Button(
                 onClick = {
-                    // Validation
-                    var isValid = true
-                    if (username.isEmpty()) {
-                        usernameError = true
-                        isValid = false
-                    }
-                    if (password.isEmpty()) {
-                        passwordError = true
-                        isValid = false
-                    }
-
-                    if (isValid) {
-                        viewModel.signIn(username, password)
-
-                        if (authState.isAuthenticated) {
-                            Toast.makeText(context, "Logged In Successfully", Toast.LENGTH_SHORT).show()
-                            navController.navigate("dashboard_screen")
-                        } else {
-                            val errorMessage = authState.error ?: "An unknown error occurred. Please try again."
-                            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                        }
+                    // Check if the email is valid using regex
+                    if (emailId.isEmpty() || !emailPattern.matches(emailId)) {
+                        emailError = true
+                    } else {
+                        emailError = false
+                        // Proceed with the login logic
+                        viewModel.signIn(emailId, password)
                     }
                 },
                 modifier = Modifier
@@ -164,7 +186,7 @@ fun AuthScreen(
                 )
             }
 
-            // Navigate to Signup Button
+            // Navigate to Signup Screen
             OutlinedButton(
                 onClick = {
                     navController.navigate(Screen.SignUpScreen.route)
@@ -182,7 +204,7 @@ fun AuthScreen(
                 )
             }
 
-            // Loading Indicator
+            // Show loading state
             if (authState.isLoading) {
                 Box(
                     modifier = Modifier

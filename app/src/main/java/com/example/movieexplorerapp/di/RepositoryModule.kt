@@ -1,8 +1,10 @@
 package com.example.movieexplorerapp.di
 
-import com.example.movieexplorerapp.data.repository.FirebaseAuthRepository
+import com.example.movieexplorerapp.common.DataStoreRepository
+import com.example.movieexplorerapp.data.repository.FirebaseAuthRepositoryImpl
 import com.example.movieexplorerapp.domain.respository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +21,14 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
-        return FirebaseAuthRepository(firebaseAuth)
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @Provides
+    fun provideAuthRepository(
+        firebaseAuth: FirebaseAuth,
+        dataStoreRepository: DataStoreRepository,
+        firestore: FirebaseFirestore
+    ): AuthRepository {
+        return FirebaseAuthRepositoryImpl(firebaseAuth, dataStoreRepository, firestore)
     }
 }

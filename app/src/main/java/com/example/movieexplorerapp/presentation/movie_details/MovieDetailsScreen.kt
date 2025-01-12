@@ -1,15 +1,26 @@
 package com.example.movieexplorerapp.presentation.movie_details
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,6 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -24,9 +37,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -42,229 +55,263 @@ import com.example.movieexplorerapp.presentation.dashboard.components.IsLoading
 import com.example.movieexplorerapp.presentation.movie_details.components.CircularProgress
 import com.example.movieexplorerapp.presentation.movie_details.components.ItemCastCard
 import com.example.movieexplorerapp.presentation.view_all.components.ToolBar
-import com.example.tmdbapp.utils.formattedYear
-import com.example.tmdbapp.utils.minuteToTime
-import java.util.*
+import com.example.movieexplorerapp.common.formattedYear
 
 @Composable
 fun MovieDetailsScreen(
     navController: NavController, title: String, viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
-    Scaffold(topBar = {
-        ToolBar(title = title, onBack = {
-            navController.popBackStack()
-        })
-    }) { paddingValues ->
+    Scaffold(
+        topBar = {
+            ToolBar(title = title, onBack = {
+                navController.popBackStack()
+            })
+        },
+        containerColor = MaterialTheme.colorScheme.background,
+    ) { paddingValues ->
         Box(
-            modifier = Modifier.padding(
-                bottom = paddingValues.calculateBottomPadding()
-            )
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = paddingValues.calculateBottomPadding())
         ) {
             val details = viewModel.movieDetailsResponse.value
             val cast = viewModel.movieCreditsResponse.value
             val videos = viewModel.getVideosResponse.value
+
             if (details.id != null && cast.id != null) {
-                LazyColumn(content = {
+                LazyColumn(
+                    contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
                     item { ItemPoster(details) }
-                    item { ItemTitle(navController,details, videos) }
+                    item { ItemTitle(navController, details, videos) }
                     item { ItemOverview(details) }
                     item { ItemCast(cast) }
-                })
+                }
             }
+
+            // Loading and Error State
             IsLoading(isLoading = viewModel.isLoading.containsValue(true))
             ErrorView(viewModel.apiError.value)
         }
     }
 }
 
-
 @Composable
 fun ItemPoster(response: MovieDetailsResponse) {
-    Box(modifier = Modifier.padding(horizontal = 15.dp)) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(BuildConfig.ORIGINAL_IMAGE_URL + response.backdropPath).crossfade(true)
-                .build(),
-            contentDescription = stringResource(id = R.string.description),
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(start = 60.dp)
-                .clip(shape = RoundedCornerShape(10.dp))
-        )
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(240.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .shadow(8.dp, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface),
+        contentAlignment = Alignment.Center
+    ) {
+        // Background Image with Gradient Overlay
+        Box {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(BuildConfig.ORIGINAL_IMAGE_URL + response.backdropPath)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = stringResource(id = R.string.description),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp)
+                    .clip(shape = RoundedCornerShape(16.dp))
+            )
 
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(BuildConfig.ORIGINAL_IMAGE_URL + response.posterPath).crossfade(true).build(),
-            contentDescription = stringResource(id = R.string.description),
-            contentScale = ContentScale.FillBounds,
+            // Gradient Overlay
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Black.copy(alpha = 0.6f)
+                            )
+                        )
+                    )
+            )
+        }
+
+        // Poster Image
+        Box(
             modifier = Modifier
-                .width(120.dp)
-                .height(160.dp)
+                .size(140.dp)
                 .align(Alignment.CenterStart)
-                .clip(shape = RoundedCornerShape(10.dp))
-        )
+                .offset(x = 16.dp) // Adjust offset to align the poster cleanly
+                .clip(shape = RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.background)
+                .shadow(12.dp, RoundedCornerShape(16.dp))
+        ) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(BuildConfig.ORIGINAL_IMAGE_URL + response.posterPath)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = stringResource(id = R.string.description),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
 
 @Composable
-fun ItemTitle( navController: NavController,response: MovieDetailsResponse, videos: GetVideosResponse) {
-
-    Spacer(modifier = Modifier.height(20.dp))
-
-    val title = response.title ?: ""
-    val year = formattedYear(response.releaseDate) ?: ""
-    Text(
-        text = buildAnnotatedString {
-            append(title); append(" ");withStyle(style = SpanStyle(color = Color.Gray)) {
-            append(
-                "($year)"
-            )
-        }
-        },
-        style = MaterialTheme.typography.bodySmall,
-        overflow = TextOverflow.Ellipsis,
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .fillMaxWidth(),
-        textAlign = TextAlign.Center
-    )
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 15.dp),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "R",
-            style = MaterialTheme.typography.bodySmall,
-            maxLines = 1,
-            modifier = Modifier.padding(end = 10.dp)
-        )
-
-        val originalLanguage = if (response.originalLanguage != null) {
-            " (${response.originalLanguage.uppercase(Locale.ROOT)})"
-        } else ""
-        Text(
-            text = response.releaseDate + originalLanguage + " " + response.runtime?.let {
-                minuteToTime(
-                    it
-                )
-            },
-            style = MaterialTheme.typography.bodySmall,
-            maxLines = 1,
-            modifier = Modifier.padding(end = 10.dp)
-        )
-    }
-
-
-    LazyRow(
-        horizontalArrangement = Arrangement.Center,
+fun ItemTitle(navController: NavController, response: MovieDetailsResponse, videos: GetVideosResponse) {
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        content = {
-            response.genres.forEach {
-                item {
-                    Text(
-                        text = if (it == response.genres.last()) it.name.toString() else it.name + ", ",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray,
-                        maxLines = 1
-                    )
-                }
-            }
-        })
-
-    Spacer(modifier = Modifier.height(10.dp))
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 15.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgress((response.voteAverage?.toFloat()?.div(10)) ?: 0f)
+        val title = response.title ?: ""
+        val year = formattedYear(response.releaseDate) ?: ""
 
         Text(
-            text = "User Score",
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(start = 10.dp, end = 15.dp)
-        )
-
-        Divider(
-            modifier = Modifier
-                .height(20.dp)
-                .width(3.dp)
-                .background(Color.LightGray)
+            text = buildAnnotatedString {
+                append(title)
+                append(" ")
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                    append("($year)")
+                }
+            },
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 8.dp)
         )
 
         Row(
-            modifier = Modifier
-                .clickable(onClick = {
-                    val item = videos.results?.last { it?.type == "Trailer" }
-                    navController.navigate(Screen.YoutubePlayerScreen.route + "youtubeCode=${item?.key}")
-                })
-                .padding(start = 15.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = stringResource(id = R.string.description),
-                tint = Color.Black,
-                modifier = Modifier.size(18.dp)
-            )
-            Text(
-                text = "Play Trailer",
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                modifier = Modifier.padding(end = 10.dp)
-            )
+            response.genres.forEach {
+                it.name?.let { it1 -> Chip(label = it1) }
+            }
+        }
 
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Circular Progress with User Score
+                Column(
+                    modifier = Modifier.padding(end = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgress((response.voteAverage.toFloat().div(10)))
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "User Score",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
+                // Divider with padding
+                Box(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(1.dp)
+                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                )
+
+                // Play Trailer Icon Button
+                Column(
+                    modifier = Modifier.padding(start = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    IconButton(
+                        onClick = {
+                            val trailer = videos.results?.find { it?.type == "Trailer" }
+                            trailer?.key?.let { navController.navigate(Screen.YoutubePlayerScreen.route + "youtubeCode=$it") }
+                        },
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = "Play Trailer",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Play Trailer",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         }
     }
-
-
 }
 
 @Composable
 fun ItemOverview(response: MovieDetailsResponse) {
-    Spacer(modifier = Modifier.height(15.dp))
-    Text(
-        text = "Overview",
-        style = MaterialTheme.typography.bodySmall,
-        maxLines = 1,
-        modifier = Modifier.padding(start = 15.dp)
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    val lineHeight = MaterialTheme.typography.bodySmall.fontSize * 4 / 3
-    Text(
-        text = response.overview ?: "",
-        style = MaterialTheme.typography.bodySmall,
-        lineHeight = lineHeight,
-        modifier = Modifier.padding(horizontal = 15.dp)
-    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Overview",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        Text(
+            text = response.overview ?: "",
+            style = MaterialTheme.typography.bodyMedium,
+            lineHeight = 22.sp,
+            modifier = Modifier.padding(vertical = 4.dp)
+        )
+    }
 }
 
 @Composable
 fun ItemCast(credits: MovieCreditsResponse) {
-    Spacer(modifier = Modifier.height(15.dp))
-    Text(
-        text = "Top Billed Cast",
-        style = MaterialTheme.typography.bodySmall,
-        maxLines = 1,
-        modifier = Modifier.padding(horizontal = 15.dp)
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    LazyRow(content = {
-        credits.cast.forEach {
-            item {
-                ItemCastCard(it)
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Top Billed Cast",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            credits.cast.forEach {
+                item { ItemCastCard(it) }
             }
         }
-    })
-    Spacer(modifier = Modifier.height(15.dp))
+    }
+}
+
+@Composable
+fun Chip(label: String) {
+    Text(
+        text = label,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSecondaryContainer,
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
+    )
 }
 
 

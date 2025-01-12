@@ -41,14 +41,13 @@ fun BottomNavigationBar(navController: NavController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     // Theme-based colors
-    val backgroundColor = MaterialTheme.colorScheme.surface
-    val contentColor = MaterialTheme.colorScheme.onSurface
-    val selectedColor = MaterialTheme.colorScheme.primary
+    val selectedColor = Color.Blue
+    val unselectedColor = Color.Gray
 
     BottomNavigation(
         modifier = Modifier.shadow(elevation = 8.dp, shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
+        backgroundColor = Color.Black,  // Set the background to black
+        contentColor = Color.White,     // Set the content color to white
         elevation = 8.dp
     ) {
         navigationItems.forEach { item ->
@@ -87,7 +86,7 @@ fun BottomNavigationBar(navController: NavController) {
                                 .size(50.dp)
                                 .clip(CircleShape)
                                 .background(
-                                    if (isSelected) selectedColor.copy(alpha = 0.2f)
+                                    if (isSelected) selectedColor.copy(alpha = 0.2f) // Highlighted background on selection
                                     else Color.Transparent
                                 )
                                 .padding(8.dp),
@@ -96,7 +95,7 @@ fun BottomNavigationBar(navController: NavController) {
                             Icon(
                                 painter = painterResource(id = item.icon),
                                 contentDescription = item.title,
-                                tint = if (isSelected) selectedColor else contentColor
+                                tint = if (isSelected) Color.White else unselectedColor // White for selected, Gray for unselected
                             )
                         }
                         if (isSelected) {
@@ -106,7 +105,7 @@ fun BottomNavigationBar(navController: NavController) {
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold
                                 ),
-                                color = selectedColor,
+                                color = Color.White, // Set the text color to white when selected
                                 modifier = Modifier.padding(top = 4.dp)
                             )
                         }

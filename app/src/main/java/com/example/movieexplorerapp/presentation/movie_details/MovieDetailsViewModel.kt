@@ -40,16 +40,15 @@ class MovieDetailsViewModel @Inject constructor(
     val apiError: State<Boolean> = _apiError
 
     private var _isLoading = mutableStateMapOf<Int, Boolean>()
-    val isLoading: Map<Int,Boolean> = _isLoading
+    val isLoading: Map<Int, Boolean> = _isLoading
 
     init {
         initMapValues()
-      savedStateHandle.get<String>("movieId")?.let { movieId ->
+        savedStateHandle.get<String>("movieId")?.let { movieId ->
             if (movieId.isNotEmpty()) {
                 viewModelScope.launch {
                     useCases.movieDetails.invoke(Constants.LANG, movieId).collect {
                         when (it) {
-
                             is NetworkResult.Success -> {
                                 it.value.body()?.let { response ->
                                     _movieDetailsResponse.value = response
@@ -58,6 +57,7 @@ class MovieDetailsViewModel @Inject constructor(
                                 }
 
                             }
+
                             is NetworkResult.Failure -> {
                                 _apiError.value = true
                                 _isLoading[0] = false
@@ -80,6 +80,7 @@ class MovieDetailsViewModel @Inject constructor(
                                 }
 
                             }
+
                             is NetworkResult.Failure -> {
                                 _apiError.value = true
                                 _isLoading[1] = false
@@ -102,6 +103,7 @@ class MovieDetailsViewModel @Inject constructor(
                                 }
 
                             }
+
                             is NetworkResult.Failure -> {
                                 _apiError.value = true
                                 _isLoading[2] = false
@@ -111,12 +113,8 @@ class MovieDetailsViewModel @Inject constructor(
 
                             }
                         }
-
                     }
-
-
                 }
-
             }
         }
     }

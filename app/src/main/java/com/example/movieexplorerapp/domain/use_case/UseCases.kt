@@ -28,4 +28,4 @@ data class UseCases(
     val movieCredits: MovieCredits,
     val getVideos: GetVideos,
     val searchMoviesPagingList: SearchMoviesPagingList,
-    )
+)

@@ -3,6 +3,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movieexplorerapp.domain.model.User
 import com.example.movieexplorerapp.domain.respository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -40,6 +41,21 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.signOut()
             _authState.value = AuthState(isAuthenticated = false)
+        }
+    }
+
+    fun getUserInfo() {
+        viewModelScope.launch {
+            _authState.value = AuthState(isLoading = true)
+            val userInfo = authRepository.getUserInfo()
+
+            if (userInfo != null) {
+                // Update the state with user info
+                _authState.value = AuthState(user = userInfo)
+            } else {
+                // Handle error (optional)
+                _authState.value = AuthState(error = "Failed to fetch user info")
+            }
         }
     }
 }
