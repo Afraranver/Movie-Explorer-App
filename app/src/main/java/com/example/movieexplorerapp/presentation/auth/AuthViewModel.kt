@@ -1,4 +1,4 @@
-package com.example.movieexplorerapp.presentation.login
+package com.example.movieexplorerapp.presentation.auth
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -16,7 +16,6 @@ class AuthViewModel @Inject constructor(
     private val _authState = mutableStateOf(AuthState())
     val authState: State<AuthState> = _authState
 
-    // Sign Up method
     fun signUp(email: String, password: String) {
         viewModelScope.launch {
             _authState.value = AuthState(isLoading = true)
@@ -25,7 +24,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    // Sign In method
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
             _authState.value = AuthState(isLoading = true)
@@ -34,12 +32,10 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    // Check if user is authenticated
     fun checkAuthStatus() {
         _authState.value = AuthState(isAuthenticated = authRepository.isAuthenticated())
     }
 
-    // Sign Out method
     fun signOut() {
         viewModelScope.launch {
             authRepository.signOut()

@@ -1,4 +1,4 @@
-package com.example.movieexplorerapp.presentation.login
+package com.example.movieexplorerapp.presentation.auth
 
 data class AuthState(
     val isLoading: Boolean = false,

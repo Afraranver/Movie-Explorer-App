@@ -1,9 +1,0 @@
-package com.example.movieexplorerapp.presentation.login
-
-data class LoginState(
-    val isLoading: Boolean = false,
-    val userId: String? = null,
-    val sessionId: String? = null,
-    val error: String? = null,
-    val message: String? = null
-)

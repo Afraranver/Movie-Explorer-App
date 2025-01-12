@@ -2,6 +2,7 @@ package com.example.movieexplorerapp.presentation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -10,11 +11,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.movieexplorerapp.presentation.dashboard.DashboardScreen
-import com.example.movieexplorerapp.presentation.login.AuthScreen
-import com.example.movieexplorerapp.presentation.login.LoginViewModel
+import com.example.movieexplorerapp.presentation.auth.AuthScreen
+import com.example.movieexplorerapp.presentation.auth.AuthViewModel
 import com.example.movieexplorerapp.presentation.movie_details.MovieDetailsScreen
 import com.example.movieexplorerapp.presentation.movie_details.YoutubePlayerScreen
 import com.example.movieexplorerapp.presentation.search_movie.SearchPageScreen
+import com.example.movieexplorerapp.presentation.auth.SignUpScreen
 import com.example.movieexplorerapp.presentation.view_all.ViewAllScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 
@@ -22,19 +24,29 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    val loginState = hiltViewModel<LoginViewModel>().loginState.value
+    val authViewModel = hiltViewModel<AuthViewModel>()
+
+    LaunchedEffect(Unit) {
+        authViewModel.checkAuthStatus()
+    }
+
+    val isAuthenticated = authViewModel.authState.value.isAuthenticated
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = if (loginState.sessionId == null) Screen.LoginScreen.route else Screen.Dashboard.route
+        startDestination = if (isAuthenticated) Screen.Dashboard.route else Screen.AuthScreen.route
     ) {
-        // Login screen
-        composable(route = Screen.AuthScreen.route) { backStackEntry ->
-            // Pass the `isSignUp` parameter based on some logic or navigation arguments
-            val isSignUp = backStackEntry.arguments?.getString("isSignUp")?.toBoolean() ?: false
+        composable(route = Screen.AuthScreen.route) {
             AuthScreen(
-                isSignUp = isSignUp,
-                navController = navController
+                navController = navController,
+                viewModel = authViewModel
+            )
+        }
+
+        composable(route = Screen.SignUpScreen.route) {
+            SignUpScreen(
+                navController = navController,
+                viewModel = authViewModel
             )
         }
 
