@@ -64,7 +64,7 @@ fun MovieItemCard(item: MovieItem?, modifier: Modifier, navController: NavContro
                 }
             )
             Spacer(modifier = Modifier.height(10.dp))
-            val lineHeight = MaterialTheme.typography.displaySmall.fontSize * 4 / 3
+            val lineHeight = MaterialTheme.typography.bodyLarge.fontSize * 4 / 3
             Text(
                 text = item?.title ?: "",
                 style = MaterialTheme.typography.bodyMedium,

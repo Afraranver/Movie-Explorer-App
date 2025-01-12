@@ -1,6 +1,5 @@
 package com.example.movieexplorerapp.data.remote.dto.model.movies
 
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
 import com.google.gson.annotations.SerializedName
 
 data class PopularMovieResponse(

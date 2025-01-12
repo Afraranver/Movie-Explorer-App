@@ -1,15 +1,20 @@
 package com.example.movieexplorerapp.presentation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.movieexplorerapp.common.HomeBottomNavigation
 import com.example.movieexplorerapp.presentation.dashboard.DashboardScreen
 import com.example.movieexplorerapp.presentation.auth.AuthScreen
 import com.example.movieexplorerapp.presentation.auth.AuthViewModel
@@ -17,6 +22,9 @@ import com.example.movieexplorerapp.presentation.movie_details.MovieDetailsScree
 import com.example.movieexplorerapp.presentation.movie_details.YoutubePlayerScreen
 import com.example.movieexplorerapp.presentation.search_movie.SearchPageScreen
 import com.example.movieexplorerapp.presentation.auth.SignUpScreen
+import com.example.movieexplorerapp.presentation.dashboard.components.BottomNavigationBar
+import com.example.movieexplorerapp.presentation.profile.ProfileScreen
+import com.example.movieexplorerapp.presentation.profile.ProfileViewModel
 import com.example.movieexplorerapp.presentation.view_all.ViewAllScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 
@@ -25,6 +33,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 fun Navigation() {
     val navController = rememberNavController()
     val authViewModel = hiltViewModel<AuthViewModel>()
+    val profileViewModel = hiltViewModel<ProfileViewModel>()
 
     LaunchedEffect(Unit) {
         authViewModel.checkAuthStatus()
@@ -32,30 +41,43 @@ fun Navigation() {
 
     val isAuthenticated = authViewModel.authState.value.isAuthenticated
 
-    AnimatedNavHost(
-        navController = navController,
-        startDestination = if (isAuthenticated) Screen.Dashboard.route else Screen.AuthScreen.route
-    ) {
-        composable(route = Screen.AuthScreen.route) {
-            AuthScreen(
-                navController = navController,
-                viewModel = authViewModel
-            )
-        }
+    Scaffold { padding ->
+        AnimatedNavHost(
+            navController = navController,
+            startDestination = if (isAuthenticated) Screen.Dashboard.route else Screen.AuthScreen.route,
+            modifier = Modifier.padding(padding)
+        ) {
+            composable(route = Screen.AuthScreen.route) {
+                AuthScreen(
+                    navController = navController,
+                    viewModel = authViewModel
+                )
+            }
 
-        composable(route = Screen.SignUpScreen.route) {
-            SignUpScreen(
-                navController = navController,
-                viewModel = authViewModel
-            )
-        }
+            composable(route = Screen.SignUpScreen.route) {
+                SignUpScreen(
+                    navController = navController,
+                    viewModel = authViewModel
+                )
+            }
 
-        // Dashboard and other screens
-        addDashboard(navController)
-        addViewAllMovies(navController)
-        addMovieDetails(navController)
-        addYoutubePlayer(navController)
-        addSearchPage(navController)
+            composable(route = Screen.ProfileScreen.route) {
+                ProfileScreen(
+                    navController = navController,
+                    viewModel = profileViewModel
+                )
+            }
+
+            composable(route = Screen.Dashboard.route) {
+                DashboardScreen(navController = navController)
+            }
+
+            // Add other routes
+            addViewAllMovies(navController)
+            addMovieDetails(navController)
+            addYoutubePlayer(navController)
+            addSearchPage(navController)
+        }
     }
 }
 

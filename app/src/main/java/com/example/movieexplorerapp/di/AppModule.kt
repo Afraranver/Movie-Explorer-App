@@ -1,5 +1,7 @@
 package com.example.movieexplorerapp.di
 
+import android.app.Application
+import android.content.Context
 import com.example.movieexplorerapp.BuildConfig
 import com.example.movieexplorerapp.common.Constants
 import com.example.movieexplorerapp.data.remote.TMDbApiService
@@ -104,4 +106,10 @@ object AppModule {
         GetVideos(tmDbRepository),
         SearchMoviesPagingList(tmDbRepository),
     )
+
+    @Provides
+    @Singleton
+    fun provideContext(application: Application): Context {
+        return application.applicationContext
+    }
 }
