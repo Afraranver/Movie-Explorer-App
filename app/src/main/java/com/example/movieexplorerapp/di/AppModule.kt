@@ -2,8 +2,11 @@ package com.example.movieexplorerapp.di
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
 import com.example.movieexplorerapp.BuildConfig
 import com.example.movieexplorerapp.common.Constants
+import com.example.movieexplorerapp.data.local.dao.MovieDao
+import com.example.movieexplorerapp.data.local.database.AppDatabase
 import com.example.movieexplorerapp.data.remote.TMDbApiService
 import com.example.movieexplorerapp.domain.respository.TMDbRepository
 import com.example.movieexplorerapp.domain.use_case.UseCases
@@ -24,6 +27,7 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -111,5 +115,23 @@ object AppModule {
     @Singleton
     fun provideContext(application: Application): Context {
         return application.applicationContext
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "movie_database"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMovieDao(appDatabase: AppDatabase): MovieDao {
+        return appDatabase.movieDao()
     }
 }

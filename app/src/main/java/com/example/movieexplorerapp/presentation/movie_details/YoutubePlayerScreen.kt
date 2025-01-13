@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import com.example.movieexplorerapp.presentation.dashboard.components.IsLoading
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.loadOrCueVideo
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 @Composable
@@ -29,7 +30,7 @@ fun YoutubePlayerScreen(navController: NavController, youtubeCode: String) {
             initialize(object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.apply {
-//                        loadOrCueVideo(activityLifecycle, youtubeCode, 0f)
+                        loadOrCueVideo(activityLifecycle, youtubeCode, 0f)
                         toggleFullScreen()
                         loading.value = false
                     }

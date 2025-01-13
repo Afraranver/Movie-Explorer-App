@@ -25,7 +25,7 @@ data class MovieItem(
     val title: String = "",
 
     @SerializedName("poster_path")
-    val posterPath: String = "",
+    val posterPath: String? = null,
 
     @SerializedName("backdrop_path")
     val backdropPath: String = "",

@@ -13,6 +13,6 @@ sealed class NetworkResult<out T> {
         val errorMessage: String?
     ) : NetworkResult<Nothing>()
 
-    object Loading : NetworkResult<Nothing>()
+    data object Loading : NetworkResult<Nothing>()
 
 }

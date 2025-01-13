@@ -133,8 +133,9 @@ dependencies {
     implementation(libs.core)
 
     // Room
-//    implementation(libs.room.runtime)
-//    implementation(libs.room.ktx)
-//    kapt(libs.room.compiler)  // Use kapt for Kotlin projects
-//    implementation(libs.room.paging)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)  // Use kapt for Kotlin projects
+    implementation(libs.room.paging)
+
 }

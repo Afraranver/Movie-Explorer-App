@@ -1,4 +1,4 @@
-package com.example.tmdbapp.data.repository
+package com.example.movieexplorerapp.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -7,6 +7,9 @@ import com.example.movieexplorerapp.common.Constants
 import com.example.tmdbapp.data.paging.*
 import com.example.movieexplorerapp.common.NetworkResult
 import com.example.movieexplorerapp.common.ResponseCodeManager
+import com.example.movieexplorerapp.common.convertCachedMoviesToSearchMovieResponse
+import com.example.movieexplorerapp.data.local.dao.MovieDao
+import com.example.movieexplorerapp.data.local.entity.MovieEntity
 import com.example.movieexplorerapp.data.remote.TMDbApiService
 import com.example.movieexplorerapp.data.remote.dto.RequestTokenResponse
 import com.example.movieexplorerapp.data.remote.dto.SessionResponse
@@ -27,12 +30,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class TmDbRepositoryImpl @Inject constructor(private val apiService: TMDbApiService) :
+class TmDbRepositoryImpl @Inject constructor(
+    private val movieDao: MovieDao,
+    private val apiService: TMDbApiService
+) :
     TMDbRepository {
     override suspend fun getRequestToken(apiKey: String): RequestTokenResponse {
         TODO("Not yet implemented")
@@ -338,6 +345,42 @@ class TmDbRepositoryImpl @Inject constructor(private val apiService: TMDbApiServ
 
     }
 
+//    override suspend fun searchPagingList(
+//        query: String,
+//        lang: String
+//    ): Flow<NetworkResult<Response<SearchMovieResponse>>> {
+//        return flow {
+//            emit(NetworkResult.Loading)
+//            try {
+//                val response = apiService.searchMovie(query = query, language = lang, page = 1)
+//                emit(
+//                    if (response.isSuccessful) NetworkResult.Success(response) else
+//                        NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+//                )
+//            } catch (throwable: Throwable) {
+//                emit(
+//                    when (throwable) {
+//                        is HttpException -> {
+//                            NetworkResult.Failure(
+//                                false,
+//                                throwable.code(),
+//                                throwable.response()?.errorBody(),
+//                                throwable.response()
+//                                    ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
+//                        }
+//                        is IOException -> {
+//                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
+//                        }
+//                        else -> {
+//                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+//                        }
+//                    }
+//                )
+//            }
+//        }.flowOn(Dispatchers.IO)
+//
+//    }
+
     override suspend fun searchPagingList(
         query: String,
         lang: String
@@ -346,33 +389,37 @@ class TmDbRepositoryImpl @Inject constructor(private val apiService: TMDbApiServ
             emit(NetworkResult.Loading)
             try {
                 val response = apiService.searchMovie(query = query, language = lang, page = 1)
-                emit(
-                    if (response.isSuccessful) NetworkResult.Success(response) else
-                        NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
-                )
-            } catch (throwable: Throwable) {
-                emit(
-                    when (throwable) {
-                        is HttpException -> {
-                            NetworkResult.Failure(
-                                false,
-                                throwable.code(),
-                                throwable.response()?.errorBody(),
-                                throwable.response()
-                                    ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
-                        }
-                        is IOException -> {
-                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
-                        }
-                        else -> {
-                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
-                        }
-                    }
-                )
+                if (response.isSuccessful) {
+                    val movies = response.body()?.results?.map {
+                        MovieEntity(
+                            id = it.movieId.toIntOrNull() ?: 0,
+                            title = it.title,
+                            overview = it.overview,
+                            posterPath = it.posterPath,
+                            releaseDate = it.releaseDate
+                        )
+                    } ?: emptyList()
+
+                    // Cache results in Room
+                    movieDao.insertMovies(movies)
+
+                    emit(NetworkResult.Success(response))
+                } else {
+                    emit(NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE))
+                }
+            } catch (e: Exception) {
+                // On failure, try to fetch from Room (on background thread)
+                val cachedMovies = withContext(Dispatchers.IO) {
+                    movieDao.searchMovies(query)
+                }
+
+                if (cachedMovies.isNotEmpty()) {
+                    val cachedResponse = convertCachedMoviesToSearchMovieResponse(cachedMovies)
+                    emit(NetworkResult.Success(Response.success(cachedResponse)))
+                } else {
+                    emit(NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE))
+                }
             }
-        }.flowOn(Dispatchers.IO)
-
+        }.flowOn(Dispatchers.IO) // Ensure that the flow is collected on IO dispatcher
     }
-
-
 }

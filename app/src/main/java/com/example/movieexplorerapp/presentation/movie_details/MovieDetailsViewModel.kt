@@ -55,7 +55,6 @@ class MovieDetailsViewModel @Inject constructor(
                                     delay(1000)
                                     _isLoading[0] = false
                                 }
-
                             }
 
                             is NetworkResult.Failure -> {

@@ -34,6 +34,7 @@ import com.example.movieexplorerapp.presentation.dashboard.components.BottomNavi
 import com.example.movieexplorerapp.presentation.dashboard.components.ErrorView
 import com.example.movieexplorerapp.presentation.movie_details.components.SearchBar
 import com.example.movieexplorerapp.presentation.search_movie.components.SearchEmpty
+import com.example.movieexplorerapp.presentation.search_movie.components.SearchItemList
 import com.example.movieexplorerapp.presentation.search_movie.components.SearchMovieItemCard
 
 @Composable
@@ -124,18 +125,6 @@ fun SearchPageScreen(
     }
 }
 
-@Composable
-fun SearchItemList(viewModel: SearchPageViewModel, navController: NavController) {
-    LazyColumn() {
-        items(
-            items = viewModel.searchMoviePagingItems,
-            key = { item ->
-                item.movieId
-            }
-        ) { item ->
-            SearchMovieItemCard(item, navController)
-        }
-    }
-}
+
 
 

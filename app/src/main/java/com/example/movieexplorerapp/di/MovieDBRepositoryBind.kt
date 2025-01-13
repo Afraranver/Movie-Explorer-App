@@ -1,7 +1,7 @@
 package com.example.movieexplorerapp.di
 
 import com.example.movieexplorerapp.domain.respository.TMDbRepository
-import com.example.tmdbapp.data.repository.TmDbRepositoryImpl
+import com.example.movieexplorerapp.data.repository.TmDbRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
