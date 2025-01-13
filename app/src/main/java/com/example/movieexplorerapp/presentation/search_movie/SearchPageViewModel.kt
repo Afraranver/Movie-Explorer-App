@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieexplorerapp.common.Constants
 import com.example.movieexplorerapp.common.NetworkResult
-import com.example.movieexplorerapp.data.local.entity.MovieEntity
 import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import com.example.movieexplorerapp.domain.use_case.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,11 +54,13 @@ class SearchPageViewModel @Inject constructor(val useCases: UseCases) : ViewMode
                         }
                         _isLoading.value = false
                     }
+
                     is NetworkResult.Failure -> {
                         _apiError.value = true
                         _isLoading.value = false
                         _listEmpty.value = false
                     }
+
                     is NetworkResult.Loading -> {
                         _isLoading.value = true
                         _listEmpty.value = false

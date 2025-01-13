@@ -19,6 +19,7 @@ import retrofit2.Response
 interface TMDbRepository {
     //TODO
     suspend fun getRequestToken(apiKey: String): RequestTokenResponse
+
     //TODO
     suspend fun getSessionId(apiKey: String, requestToken: String): SessionResponse
 
@@ -53,5 +54,8 @@ interface TMDbRepository {
         movieId: String
     ): Flow<NetworkResult<Response<GetVideosResponse>>>
 
-    suspend fun searchPagingList(query: String, lang: String): Flow<NetworkResult<Response<SearchMovieResponse>>>
+    suspend fun searchPagingList(
+        query: String,
+        lang: String
+    ): Flow<NetworkResult<Response<SearchMovieResponse>>>
 }

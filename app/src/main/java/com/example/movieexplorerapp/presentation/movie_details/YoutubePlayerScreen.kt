@@ -17,7 +17,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 @Composable
 fun YoutubePlayerScreen(navController: NavController, youtubeCode: String) {
-    val lifecycleOwner = rememberUpdatedState(androidx.lifecycle.compose.LocalLifecycleOwner.current)
+    val lifecycleOwner =
+        rememberUpdatedState(androidx.lifecycle.compose.LocalLifecycleOwner.current)
     val loading = remember { mutableStateOf(true) }
 
     val activityLifecycle = lifecycleOwner.value.lifecycle

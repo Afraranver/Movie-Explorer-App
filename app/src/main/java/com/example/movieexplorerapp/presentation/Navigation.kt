@@ -44,14 +44,6 @@ fun Navigation() {
     val authStateFlow = dataStoreRepository.isAuthenticated.collectAsState(initial = false)
     val isAuthenticated = authStateFlow.value
 
-    // Start screen based on authentication state
-//    val startDestination = if (isAuthenticated) Screen.Dashboard.route else Screen.AuthScreen.route
-
-    // Observe and navigate based on authentication status
-    LaunchedEffect(isAuthenticated) {
-        // Optionally, check or perform actions based on auth status
-    }
-
     val userPreferences = UserPreferences(context)
     val isLoggedIn = userPreferences.getLoginState()
     val startDestination = if (isLoggedIn) Screen.Dashboard.route else Screen.AuthScreen.route
@@ -85,13 +77,19 @@ private fun NavGraphBuilder.addAuthScreen(navController: NavController, viewMode
     }
 }
 
-private fun NavGraphBuilder.addSignUpScreen(navController: NavController, viewModel: AuthViewModel) {
+private fun NavGraphBuilder.addSignUpScreen(
+    navController: NavController,
+    viewModel: AuthViewModel
+) {
     composable(route = Screen.SignUpScreen.route) {
         SignUpScreen(navController = navController, viewModel = viewModel)
     }
 }
 
-private fun NavGraphBuilder.addProfileScreen(navController: NavController, viewModel: ProfileViewModel) {
+private fun NavGraphBuilder.addProfileScreen(
+    navController: NavController,
+    viewModel: ProfileViewModel
+) {
     composable(route = Screen.ProfileScreen.route) {
         ProfileScreen(navController = navController, viewModel = viewModel)
     }
@@ -107,7 +105,9 @@ private fun NavGraphBuilder.addDashboardScreen(navController: NavController) {
 private fun NavGraphBuilder.addViewAllMovies(navController: NavController) {
     composable(
         route = Screen.ViewAll.route + "?moviesType={moviesType}",
-        arguments = listOf(navArgument("moviesType") { type = NavType.StringType; defaultValue = "" })
+        arguments = listOf(navArgument("moviesType") {
+            type = NavType.StringType; defaultValue = ""
+        })
     ) {
         val moviesType = it.arguments?.getString("moviesType") ?: ""
         ViewAllScreen(navController = navController, moviesType)
@@ -130,7 +130,9 @@ private fun NavGraphBuilder.addMovieDetails(navController: NavController) {
 private fun NavGraphBuilder.addYoutubePlayer(navController: NavController) {
     composable(
         route = Screen.YoutubePlayerScreen.route + "youtubeCode={youtubeCode}",
-        arguments = listOf(navArgument("youtubeCode") { type = NavType.StringType; defaultValue = "" })
+        arguments = listOf(navArgument("youtubeCode") {
+            type = NavType.StringType; defaultValue = ""
+        })
     ) {
         val youtubeCode = it.arguments?.getString("youtubeCode") ?: ""
         YoutubePlayerScreen(navController = navController, youtubeCode)

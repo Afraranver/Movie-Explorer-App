@@ -45,7 +45,10 @@ fun BottomNavigationBar(navController: NavController) {
     val unselectedColor = Color.Gray
 
     BottomNavigation(
-        modifier = Modifier.shadow(elevation = 8.dp, shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+        modifier = Modifier.shadow(
+            elevation = 8.dp,
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        ),
         backgroundColor = Color.Black,  // Set the background to black
         contentColor = Color.White,     // Set the content color to white
         elevation = 8.dp
@@ -63,12 +66,14 @@ fun BottomNavigationBar(navController: NavController) {
                                 popUpTo(Screen.Dashboard.route) { inclusive = true }
                             }
                         }
+
                         is HomeBottomNavigation.Profile -> {
                             // Navigate to Profile
                             navController.navigate(Screen.ProfileScreen.route) {
                                 popUpTo(HomeBottomNavigation.Profile.route) { inclusive = true }
                             }
                         }
+
                         else -> {
                             navController.navigate(Screen.SearchPageScreen.route) {
                                 popUpTo(HomeBottomNavigation.Explore.route) { inclusive = true }

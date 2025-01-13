@@ -1,8 +1,5 @@
 package com.example.movieexplorerapp.data.remote
 
-import com.example.movieexplorerapp.data.remote.dto.RequestTokenResponse
-import com.example.movieexplorerapp.data.remote.dto.SessionResponse
-import com.example.movieexplorerapp.data.remote.dto.ValidateResponse
 import com.example.movieexplorerapp.domain.model.cast.MovieCreditsResponse
 import com.example.movieexplorerapp.domain.model.details.MovieDetailsResponse
 import com.example.movieexplorerapp.domain.model.movies.NowPlayingMovieResponse
@@ -13,31 +10,10 @@ import com.example.movieexplorerapp.domain.model.search_movies.SearchMovieRespon
 import com.example.movieexplorerapp.domain.model.videos.GetVideosResponse
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TMDbApiService {
-
-    @GET("3/authentication/token/new")
-    suspend fun getRequestToken(
-        @Query("api_key") apiKey: String
-    ): RequestTokenResponse
-
-    @POST("3/authentication/token/validate_with_login")
-    suspend fun validateWithLogin(
-        @Query("api_key") apiKey: String,
-        @Query("username") username: String,
-        @Query("password") password: String,
-        @Query("request_token") requestToken: String
-    ): ValidateResponse
-
-    // Create a session after the user is validated
-    @POST("3/authentication/session/new")
-    suspend fun createSession(
-        @Query("api_key") apiKey: String,
-        @Query("request_token") requestToken: String
-    ): SessionResponse
 
     //get now playing movies
     @GET("movie/now_playing")

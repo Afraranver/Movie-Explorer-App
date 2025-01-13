@@ -86,7 +86,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): TMDbApiService = retrofit.create(TMDbApiService::class.java)
+    fun provideApiService(retrofit: Retrofit): TMDbApiService =
+        retrofit.create(TMDbApiService::class.java)
 
 
     @Provides

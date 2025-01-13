@@ -66,7 +66,6 @@ fun MovieDetailsScreen(
 }
 
 
-
 @Composable
 fun Chip(label: String) {
     Text(

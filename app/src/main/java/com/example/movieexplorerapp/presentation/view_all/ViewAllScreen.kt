@@ -13,7 +13,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieexplorerapp.domain.model.movies.MovieItem
-
 import com.example.movieexplorerapp.presentation.dashboard.MoviesType
 import com.example.movieexplorerapp.presentation.dashboard.components.MovieItemCard
 import com.example.movieexplorerapp.presentation.view_all.components.PaginationProgress

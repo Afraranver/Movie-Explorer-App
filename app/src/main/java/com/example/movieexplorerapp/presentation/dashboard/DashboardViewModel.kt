@@ -43,12 +43,21 @@ class DashboardViewModel @Inject constructor(useCases: UseCases) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            val popularMoviesDeferred = async { loadMoviesList(useCases.popularMoviesList, _popularMovieList, 0) }
-            val nowPlayingMoviesDeferred = async { loadMoviesList(useCases.nowPlayingMoviesList, _nowPlayingMovieList, 1) }
-            val upcomingMoviesDeferred = async { loadMoviesList(useCases.upcomingMoviesList, _upcomingMovieList, 2) }
-            val topRatedMoviesDeferred = async { loadMoviesList(useCases.topRatedMoviesList, _topRatedMovieList, 3) }
+            val popularMoviesDeferred =
+                async { loadMoviesList(useCases.popularMoviesList, _popularMovieList, 0) }
+            val nowPlayingMoviesDeferred =
+                async { loadMoviesList(useCases.nowPlayingMoviesList, _nowPlayingMovieList, 1) }
+            val upcomingMoviesDeferred =
+                async { loadMoviesList(useCases.upcomingMoviesList, _upcomingMovieList, 2) }
+            val topRatedMoviesDeferred =
+                async { loadMoviesList(useCases.topRatedMoviesList, _topRatedMovieList, 3) }
 
-            awaitAll(popularMoviesDeferred, nowPlayingMoviesDeferred, upcomingMoviesDeferred, topRatedMoviesDeferred)
+            awaitAll(
+                popularMoviesDeferred,
+                nowPlayingMoviesDeferred,
+                upcomingMoviesDeferred,
+                topRatedMoviesDeferred
+            )
         }
     }
 
@@ -66,10 +75,12 @@ class DashboardViewModel @Inject constructor(useCases: UseCases) : ViewModel() {
                     }
                     _isLoading[index] = false
                 }
+
                 is NetworkResult.Failure -> {
                     _apiError.value = true
                     _isLoading[index] = false
                 }
+
                 is NetworkResult.Loading -> {
                     _isLoading[index] = true
                 }
@@ -91,10 +102,12 @@ class DashboardViewModel @Inject constructor(useCases: UseCases) : ViewModel() {
                     }
                     _isLoading[index] = false
                 }
+
                 is NetworkResult.Failure -> {
                     _apiError.value = true
                     _isLoading[index] = false
                 }
+
                 is NetworkResult.Loading -> {
                     _isLoading[index] = true
                 }
@@ -116,10 +129,12 @@ class DashboardViewModel @Inject constructor(useCases: UseCases) : ViewModel() {
                     }
                     _isLoading[index] = false
                 }
+
                 is NetworkResult.Failure -> {
                     _apiError.value = true
                     _isLoading[index] = false
                 }
+
                 is NetworkResult.Loading -> {
                     _isLoading[index] = true
                 }
@@ -141,10 +156,12 @@ class DashboardViewModel @Inject constructor(useCases: UseCases) : ViewModel() {
                     }
                     _isLoading[index] = false
                 }
+
                 is NetworkResult.Failure -> {
                     _apiError.value = true
                     _isLoading[index] = false
                 }
+
                 is NetworkResult.Loading -> {
                     _isLoading[index] = true
                 }

@@ -106,11 +106,23 @@ class TmDbRepositoryImpl @Inject constructor(
                                 throwable.response()
                                     ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
                         }
+
                         is IOException -> {
-                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
+                            NetworkResult.Failure(
+                                true,
+                                null,
+                                null,
+                                Constants.StatusMessages.DEFAULT
+                            )
                         }
+
                         else -> {
-                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                            NetworkResult.Failure(
+                                false,
+                                null,
+                                null,
+                                Constants.Errors.CONVERSION_FAILURE
+                            )
                         }
                     }
                 )
@@ -143,11 +155,23 @@ class TmDbRepositoryImpl @Inject constructor(
                                 throwable.response()
                                     ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
                         }
+
                         is IOException -> {
-                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
+                            NetworkResult.Failure(
+                                true,
+                                null,
+                                null,
+                                Constants.StatusMessages.DEFAULT
+                            )
                         }
+
                         else -> {
-                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                            NetworkResult.Failure(
+                                false,
+                                null,
+                                null,
+                                Constants.Errors.CONVERSION_FAILURE
+                            )
                         }
                     }
                 )
@@ -180,11 +204,23 @@ class TmDbRepositoryImpl @Inject constructor(
                                 throwable.response()
                                     ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
                         }
+
                         is IOException -> {
-                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
+                            NetworkResult.Failure(
+                                true,
+                                null,
+                                null,
+                                Constants.StatusMessages.DEFAULT
+                            )
                         }
+
                         else -> {
-                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                            NetworkResult.Failure(
+                                false,
+                                null,
+                                null,
+                                Constants.Errors.CONVERSION_FAILURE
+                            )
                         }
                     }
                 )
@@ -217,11 +253,23 @@ class TmDbRepositoryImpl @Inject constructor(
                                 throwable.response()
                                     ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
                         }
+
                         is IOException -> {
-                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
+                            NetworkResult.Failure(
+                                true,
+                                null,
+                                null,
+                                Constants.StatusMessages.DEFAULT
+                            )
                         }
+
                         else -> {
-                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                            NetworkResult.Failure(
+                                false,
+                                null,
+                                null,
+                                Constants.Errors.CONVERSION_FAILURE
+                            )
                         }
                     }
                 )
@@ -243,7 +291,12 @@ class TmDbRepositoryImpl @Inject constructor(
                 )
                 emit(
                     if (response.isSuccessful) NetworkResult.Success(response) else
-                        NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                        NetworkResult.Failure(
+                            false,
+                            null,
+                            null,
+                            Constants.Errors.CONVERSION_FAILURE
+                        )
                 )
             } catch (throwable: Throwable) {
                 emit(
@@ -256,11 +309,23 @@ class TmDbRepositoryImpl @Inject constructor(
                                 throwable.response()
                                     ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
                         }
+
                         is IOException -> {
-                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
+                            NetworkResult.Failure(
+                                true,
+                                null,
+                                null,
+                                Constants.StatusMessages.DEFAULT
+                            )
                         }
+
                         else -> {
-                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                            NetworkResult.Failure(
+                                false,
+                                null,
+                                null,
+                                Constants.Errors.CONVERSION_FAILURE
+                            )
                         }
                     }
                 )
@@ -281,7 +346,12 @@ class TmDbRepositoryImpl @Inject constructor(
                 )
                 emit(
                     if (response.isSuccessful) NetworkResult.Success(response) else
-                        NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                        NetworkResult.Failure(
+                            false,
+                            null,
+                            null,
+                            Constants.Errors.CONVERSION_FAILURE
+                        )
                 )
             } catch (throwable: Throwable) {
                 emit(
@@ -294,11 +364,23 @@ class TmDbRepositoryImpl @Inject constructor(
                                 throwable.response()
                                     ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
                         }
+
                         is IOException -> {
-                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
+                            NetworkResult.Failure(
+                                true,
+                                null,
+                                null,
+                                Constants.StatusMessages.DEFAULT
+                            )
                         }
+
                         else -> {
-                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                            NetworkResult.Failure(
+                                false,
+                                null,
+                                null,
+                                Constants.Errors.CONVERSION_FAILURE
+                            )
                         }
                     }
                 )
@@ -319,7 +401,12 @@ class TmDbRepositoryImpl @Inject constructor(
                 )
                 emit(
                     if (response.isSuccessful) NetworkResult.Success(response) else
-                        NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                        NetworkResult.Failure(
+                            false,
+                            null,
+                            null,
+                            Constants.Errors.CONVERSION_FAILURE
+                        )
                 )
             } catch (throwable: Throwable) {
                 emit(
@@ -332,11 +419,23 @@ class TmDbRepositoryImpl @Inject constructor(
                                 throwable.response()
                                     ?.let { ResponseCodeManager.checkRetrofitApiResponse(it) })
                         }
+
                         is IOException -> {
-                            NetworkResult.Failure(true, null, null, Constants.StatusMessages.DEFAULT)
+                            NetworkResult.Failure(
+                                true,
+                                null,
+                                null,
+                                Constants.StatusMessages.DEFAULT
+                            )
                         }
+
                         else -> {
-                            NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE)
+                            NetworkResult.Failure(
+                                false,
+                                null,
+                                null,
+                                Constants.Errors.CONVERSION_FAILURE
+                            )
                         }
                     }
                 )
@@ -405,7 +504,14 @@ class TmDbRepositoryImpl @Inject constructor(
 
                     emit(NetworkResult.Success(response))
                 } else {
-                    emit(NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE))
+                    emit(
+                        NetworkResult.Failure(
+                            false,
+                            null,
+                            null,
+                            Constants.Errors.CONVERSION_FAILURE
+                        )
+                    )
                 }
             } catch (e: Exception) {
                 // On failure, try to fetch from Room (on background thread)
@@ -417,7 +523,14 @@ class TmDbRepositoryImpl @Inject constructor(
                     val cachedResponse = convertCachedMoviesToSearchMovieResponse(cachedMovies)
                     emit(NetworkResult.Success(Response.success(cachedResponse)))
                 } else {
-                    emit(NetworkResult.Failure(false, null, null, Constants.Errors.CONVERSION_FAILURE))
+                    emit(
+                        NetworkResult.Failure(
+                            false,
+                            null,
+                            null,
+                            Constants.Errors.CONVERSION_FAILURE
+                        )
+                    )
                 }
             }
         }.flowOn(Dispatchers.IO) // Ensure that the flow is collected on IO dispatcher

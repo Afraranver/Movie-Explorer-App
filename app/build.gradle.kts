@@ -70,6 +70,9 @@ android {
         compose = true
         buildConfig = true
     }
+    defaultConfig {
+        multiDexEnabled = true
+    }
 
 }
 

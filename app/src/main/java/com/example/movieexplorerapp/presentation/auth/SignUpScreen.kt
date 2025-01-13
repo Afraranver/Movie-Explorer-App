@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -76,6 +75,7 @@ fun SignUpScreen(
             authState.isLoading -> {
                 // Show loading state
             }
+
             authState.isAuthenticated -> {
                 Toast.makeText(context, "Signed Up Successfully", Toast.LENGTH_SHORT).show()
                 val userPreferences = UserPreferences(context)
@@ -84,6 +84,7 @@ fun SignUpScreen(
                     popUpTo(Screen.SignUpScreen.route) { inclusive = true }
                 }
             }
+
             authState.error != null -> {
                 Toast.makeText(context, authState.error, Toast.LENGTH_LONG).show()
             }
@@ -260,54 +261,3 @@ fun SignUpScreen(
     }
 }
 
-@Composable
-fun LogoWithAppName() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Logo Image (Replace with your logo asset)
-        Image(
-            painter = painterResource(id = R.drawable.tmdb_logo_lg), // Replace with your logo resource
-            contentDescription = "App Logo",
-            modifier = Modifier
-                .size(100.dp)
-                .padding(bottom = 16.dp)
-        )
-        Text(
-            text = "MyApp",
-            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-}
-
-@Composable
-fun PasswordTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    passwordVisible: Boolean,
-    onPasswordVisibilityChanged: (Boolean) -> Unit
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = {
-            val image = if (passwordVisible) {
-                Icons.Default.Visibility
-            } else {
-                Icons.Default.VisibilityOff
-            }
-
-            IconButton(onClick = { onPasswordVisibilityChanged(!passwordVisible) }) {
-                Icon(imageVector = image, contentDescription = "Toggle password visibility")
-            }
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    )
-}
