@@ -24,7 +24,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.movieexplorerapp.BuildConfig
 import com.example.movieexplorerapp.R
-import com.example.movieexplorerapp.data.remote.dto.model.details.MovieDetailsResponse
+import com.example.movieexplorerapp.domain.model.details.MovieDetailsResponse
 
 @Composable
 fun ItemPoster(response: MovieDetailsResponse) {

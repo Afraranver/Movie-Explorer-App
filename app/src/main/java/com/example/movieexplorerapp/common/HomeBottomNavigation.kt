@@ -2,7 +2,6 @@ package com.example.movieexplorerapp.common
 
 import com.example.movieexplorerapp.R
 
-
 sealed class HomeBottomNavigation(val title: String, val icon: Int, val route: String) {
 
     data object Home : HomeBottomNavigation("Home", R.drawable.ic_home, "home")

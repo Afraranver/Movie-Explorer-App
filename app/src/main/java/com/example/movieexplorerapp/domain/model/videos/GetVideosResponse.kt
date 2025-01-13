@@ -1,4 +1,4 @@
-package com.example.movieexplorerapp.data.remote.dto.model.videos
+package com.example.movieexplorerapp.domain.model.videos
 
 import com.google.gson.annotations.SerializedName
 

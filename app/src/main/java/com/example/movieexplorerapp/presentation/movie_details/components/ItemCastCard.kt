@@ -36,7 +36,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movieexplorerapp.BuildConfig
 import com.example.movieexplorerapp.R
-import com.example.movieexplorerapp.data.remote.dto.model.cast.CastItem
+import com.example.movieexplorerapp.domain.model.cast.CastItem
 
 @Composable
 fun ItemCastCard(castItem: CastItem?) {

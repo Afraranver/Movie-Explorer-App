@@ -1,7 +1,7 @@
 package com.example.movieexplorerapp.domain.use_case.popular
 
 import com.example.movieexplorerapp.common.NetworkResult
-import com.example.movieexplorerapp.data.remote.dto.model.movies.PopularMovieResponse
+import com.example.movieexplorerapp.domain.model.movies.PopularMovieResponse
 import com.example.movieexplorerapp.domain.respository.TMDbRepository
 import javax.inject.Inject
 

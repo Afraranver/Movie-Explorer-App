@@ -49,7 +49,6 @@ fun ProfileScreen(
     val userName = viewModel.userName.value
     val userEmail = viewModel.userEmail.value
     val userPhotoUrl = viewModel.userPhotoUrl.value
-    val isDarkTheme = viewModel.isDarkTheme.value
     val context = LocalContext.current
 
     var showDialog by remember { mutableStateOf(false) }

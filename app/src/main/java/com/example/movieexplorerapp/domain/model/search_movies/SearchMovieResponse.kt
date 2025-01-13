@@ -1,6 +1,6 @@
-package com.example.movieexplorerapp.data.remote.dto.model.search_movies
+package com.example.movieexplorerapp.domain.model.search_movies
 
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import com.google.gson.annotations.SerializedName
 
 data class SearchMovieResponse(

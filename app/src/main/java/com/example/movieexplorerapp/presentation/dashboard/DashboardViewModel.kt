@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieexplorerapp.common.Constants
 import com.example.movieexplorerapp.common.NetworkResult
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import com.example.movieexplorerapp.domain.use_case.UseCases
 import com.example.movieexplorerapp.domain.use_case.now_playing.NowPlayingMoviesList
 import com.example.movieexplorerapp.domain.use_case.popular.PopularMoviesList

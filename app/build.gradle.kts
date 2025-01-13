@@ -48,12 +48,15 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -61,6 +64,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
     buildFeatures {
         compose = true
@@ -138,4 +142,16 @@ dependencies {
     kapt(libs.room.compiler)  // Use kapt for Kotlin projects
     implementation(libs.room.paging)
 
+    // Testing
+    testImplementation (libs.kotlinx.coroutines.test)
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.junit.jupiter.api)
+    testImplementation (libs.junit.jupiter.engine)
+    testImplementation (libs.mockito.kotlin)
+    androidTestImplementation (libs.ui.test.junit4)
+    androidTestImplementation (libs.mockito.kotlin.v400)
+
+    // Jetpack Compose testing dependencies
+    androidTestImplementation (libs.ui.test.junit4)
+    debugImplementation (libs.ui.test.manifest)
 }

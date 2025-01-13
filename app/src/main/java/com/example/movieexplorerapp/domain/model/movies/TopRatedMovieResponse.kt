@@ -1,13 +1,9 @@
-package com.example.movieexplorerapp.data.remote.dto.model.movies
+package com.example.movieexplorerapp.domain.model.movies
 
-import com.example.movieexplorerapp.data.remote.dto.model.movies.Dates
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import com.google.gson.annotations.SerializedName
 
-data class UpcomingMovieResponse(
-
-    @field:SerializedName("dates")
-    val dates: Dates? = null,
+data class TopRatedMovieResponse(
 
     @field:SerializedName("page")
     val page: Int? = null,

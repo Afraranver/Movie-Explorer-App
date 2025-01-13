@@ -11,9 +11,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.SavedStateHandle
 import com.example.movieexplorerapp.common.Constants
 import com.example.movieexplorerapp.common.NetworkResult
-import com.example.movieexplorerapp.data.remote.dto.model.cast.MovieCreditsResponse
-import com.example.movieexplorerapp.data.remote.dto.model.details.MovieDetailsResponse
-import com.example.movieexplorerapp.data.remote.dto.model.videos.GetVideosResponse
+import com.example.movieexplorerapp.domain.model.cast.MovieCreditsResponse
+import com.example.movieexplorerapp.domain.model.details.MovieDetailsResponse
+import com.example.movieexplorerapp.domain.model.videos.GetVideosResponse
 import com.example.movieexplorerapp.domain.use_case.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

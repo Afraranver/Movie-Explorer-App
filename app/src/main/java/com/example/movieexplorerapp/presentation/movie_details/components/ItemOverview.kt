@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.movieexplorerapp.data.remote.dto.model.details.MovieDetailsResponse
+import com.example.movieexplorerapp.domain.model.details.MovieDetailsResponse
 
 @Composable
 fun ItemOverview(response: MovieDetailsResponse) {

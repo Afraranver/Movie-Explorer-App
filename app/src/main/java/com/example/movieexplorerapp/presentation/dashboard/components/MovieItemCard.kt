@@ -30,7 +30,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.movieexplorerapp.BuildConfig
 import com.example.movieexplorerapp.R
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import com.example.movieexplorerapp.presentation.Screen
 
 @Composable

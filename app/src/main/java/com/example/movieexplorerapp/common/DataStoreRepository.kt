@@ -18,14 +18,12 @@ class DataStoreRepository(context: Context) {
 
     private val dataStore = context.encryptedDataStore
 
-    // Define keys for preferences
     private object PreferencesKeys {
         val THEME = booleanPreferencesKey("theme_preference")
         val IS_AUTHENTICATED = booleanPreferencesKey("is_authenticated")
         val USER_TOKEN = stringPreferencesKey("user_token")
     }
 
-    // Save theme preference
     suspend fun saveThemePreference(isDark: Boolean) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.THEME] = isDark
@@ -33,7 +31,6 @@ class DataStoreRepository(context: Context) {
         Log.d("DataStoreRepository", "Theme preference saved: $isDark") // Log the saved value
     }
 
-    // Get theme preference
     suspend fun getThemePreference(): Boolean {
         val preferences = dataStore.data.first()
         val theme = preferences[PreferencesKeys.THEME] ?: false // Default to light theme
@@ -41,24 +38,27 @@ class DataStoreRepository(context: Context) {
         return theme
     }
 
-    // Save authentication status and token
     suspend fun saveSession(isAuthenticated: Boolean, token: String?) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_AUTHENTICATED] = isAuthenticated
             preferences[PreferencesKeys.USER_TOKEN] = token ?: ""
         }
-        Log.d("DataStoreRepository", "Session saved: isAuthenticated = $isAuthenticated, token = ${token ?: "null"}") // Log saved session data
+        Log.d(
+            "DataStoreRepository",
+            "Session saved: isAuthenticated = $isAuthenticated, token = ${token ?: "null"}"
+        ) // Log saved session data
     }
 
-    // Get authentication status
     val isAuthenticated: Flow<Boolean> = dataStore.data
         .map { preferences ->
             val isAuth = preferences[PreferencesKeys.IS_AUTHENTICATED] ?: false
-            Log.d("DataStoreRepository", "Authentication status fetched: $isAuth") // Log the fetched authentication status
+            Log.d(
+                "DataStoreRepository",
+                "Authentication status fetched: $isAuth"
+            ) // Log the fetched authentication status
             isAuth
         }
 
-    // Get the user token
     val userToken: Flow<String> = dataStore.data
         .map { preferences ->
             val token = preferences[PreferencesKeys.USER_TOKEN] ?: ""

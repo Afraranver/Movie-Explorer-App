@@ -4,15 +4,15 @@ import androidx.paging.PagingData
 import com.example.movieexplorerapp.common.NetworkResult
 import com.example.movieexplorerapp.data.remote.dto.RequestTokenResponse
 import com.example.movieexplorerapp.data.remote.dto.SessionResponse
-import com.example.movieexplorerapp.data.remote.dto.model.cast.MovieCreditsResponse
-import com.example.movieexplorerapp.data.remote.dto.model.details.MovieDetailsResponse
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
-import com.example.movieexplorerapp.data.remote.dto.model.movies.NowPlayingMovieResponse
-import com.example.movieexplorerapp.data.remote.dto.model.movies.PopularMovieResponse
-import com.example.movieexplorerapp.data.remote.dto.model.movies.TopRatedMovieResponse
-import com.example.movieexplorerapp.data.remote.dto.model.movies.UpcomingMovieResponse
-import com.example.movieexplorerapp.data.remote.dto.model.search_movies.SearchMovieResponse
-import com.example.movieexplorerapp.data.remote.dto.model.videos.GetVideosResponse
+import com.example.movieexplorerapp.domain.model.cast.MovieCreditsResponse
+import com.example.movieexplorerapp.domain.model.details.MovieDetailsResponse
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.movies.NowPlayingMovieResponse
+import com.example.movieexplorerapp.domain.model.movies.PopularMovieResponse
+import com.example.movieexplorerapp.domain.model.movies.TopRatedMovieResponse
+import com.example.movieexplorerapp.domain.model.movies.UpcomingMovieResponse
+import com.example.movieexplorerapp.domain.model.search_movies.SearchMovieResponse
+import com.example.movieexplorerapp.domain.model.videos.GetVideosResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 

@@ -1,4 +1,4 @@
-package com.example.movieexplorerapp.data.remote.dto.model.movies
+package com.example.movieexplorerapp.domain.model.movies
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize

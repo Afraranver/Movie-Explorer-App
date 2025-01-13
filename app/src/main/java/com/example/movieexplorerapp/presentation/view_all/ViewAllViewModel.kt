@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.paging.PagingData
 import com.example.movieexplorerapp.common.Constants
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import com.example.movieexplorerapp.domain.use_case.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

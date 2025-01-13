@@ -1,22 +1,21 @@
-package com.example.movieexplorerapp.data.remote.dto.paging
+package com.example.tmdbapp.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.movieexplorerapp.common.Constants.Network.PAGE_SIZE
 import com.example.movieexplorerapp.common.Constants.Network.STARTING_PAGE_INDEX
 import com.example.movieexplorerapp.data.remote.TMDbApiService
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
-
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import retrofit2.HttpException
 import java.io.IOException
 
-class TopRatedPagingSource(private val apiService: TMDbApiService, private val lang:String) : PagingSource<Int, MovieItem>() {
+class PopularPagingSource(private val apiService: TMDbApiService, private val lang:String) : PagingSource<Int, MovieItem>() {
 
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieItem> {
         val position = params.key ?: STARTING_PAGE_INDEX
         return try {
-            val data = apiService.getTopRated(
+            val data = apiService.getPopular(
                 page = position,
                 language = lang
             )

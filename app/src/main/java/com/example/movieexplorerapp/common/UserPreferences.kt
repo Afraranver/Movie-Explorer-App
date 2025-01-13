@@ -12,7 +12,6 @@ class UserPreferences(context: Context) {
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
     }
 
-    // Save login state (whether the user is logged in)
     fun saveLoginState(isLoggedIn: Boolean) {
         sharedPreferences.edit().apply {
             putBoolean(KEY_IS_LOGGED_IN, isLoggedIn)
@@ -20,12 +19,10 @@ class UserPreferences(context: Context) {
         }
     }
 
-    // Get login state (whether the user is logged in)
     fun getLoginState(): Boolean {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
     }
 
-    // Clear login state (logout)
     fun clearLoginState() {
         sharedPreferences.edit().apply {
             remove(KEY_IS_LOGGED_IN)

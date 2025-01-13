@@ -27,8 +27,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.movieexplorerapp.common.formattedYear
-import com.example.movieexplorerapp.data.remote.dto.model.details.MovieDetailsResponse
-import com.example.movieexplorerapp.data.remote.dto.model.videos.GetVideosResponse
+import com.example.movieexplorerapp.domain.model.details.MovieDetailsResponse
+import com.example.movieexplorerapp.domain.model.videos.GetVideosResponse
 import com.example.movieexplorerapp.presentation.Screen
 import com.example.movieexplorerapp.presentation.movie_details.Chip
 

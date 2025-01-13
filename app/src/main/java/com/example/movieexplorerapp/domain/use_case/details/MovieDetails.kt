@@ -1,7 +1,7 @@
 package com.example.movieexplorerapp.domain.use_case.details
 
 import com.example.movieexplorerapp.common.NetworkResult
-import com.example.movieexplorerapp.data.remote.dto.model.details.MovieDetailsResponse
+import com.example.movieexplorerapp.domain.model.details.MovieDetailsResponse
 import com.example.movieexplorerapp.domain.respository.TMDbRepository
 import retrofit2.Response
 import javax.inject.Inject

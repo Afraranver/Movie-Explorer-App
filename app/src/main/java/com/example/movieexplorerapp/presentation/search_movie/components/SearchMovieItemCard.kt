@@ -35,7 +35,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movieexplorerapp.BuildConfig
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import com.example.movieexplorerapp.presentation.Screen
 import com.example.movieexplorerapp.R
 import com.example.movieexplorerapp.presentation.dashboard.components.FancySearchBar

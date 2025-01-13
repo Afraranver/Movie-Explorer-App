@@ -3,7 +3,7 @@ package com.example.movieexplorerapp.presentation.view_all.components
 import androidx.compose.runtime.Composable
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
 import com.example.movieexplorerapp.presentation.dashboard.components.ErrorView
 import com.example.movieexplorerapp.presentation.dashboard.components.IsLoading
 

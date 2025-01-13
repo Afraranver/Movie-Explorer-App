@@ -1,4 +1,4 @@
-package com.example.movieexplorerapp.data.remote.dto.paging
+package com.example.movieexplorerapp.domain.model.paging
 
 /*
 class SearchPagingSource(

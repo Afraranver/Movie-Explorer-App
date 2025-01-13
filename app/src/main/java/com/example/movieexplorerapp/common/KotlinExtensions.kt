@@ -1,8 +1,8 @@
 package com.example.movieexplorerapp.common
 
 import com.example.movieexplorerapp.data.local.entity.MovieEntity
-import com.example.movieexplorerapp.data.remote.dto.model.movies.MovieItem
-import com.example.movieexplorerapp.data.remote.dto.model.search_movies.SearchMovieResponse
+import com.example.movieexplorerapp.domain.model.movies.MovieItem
+import com.example.movieexplorerapp.domain.model.search_movies.SearchMovieResponse
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

@@ -1,88 +1,88 @@
-package com.example.movieexplorerapp.data.remote.dto.model.cast
+package com.example.movieexplorerapp.domain.model.cast
 
 import com.google.gson.annotations.SerializedName
 
 data class MovieCreditsResponse(
-	@SerializedName("id")
+    @SerializedName("id")
 	val id: Int = 0,
 
-	@SerializedName("cast")
+    @SerializedName("cast")
 	val cast: List<CastItem> = emptyList(),
 
-	@SerializedName("crew")
+    @SerializedName("crew")
 	val crew: List<CrewItem> = emptyList()
 )
 
 data class CrewItem(
-	@SerializedName("id")
+    @SerializedName("id")
 	val id: Int = 0,
 
-	@SerializedName("gender")
+    @SerializedName("gender")
 	val gender: Gender = Gender.UNKNOWN,
 
-	@SerializedName("credit_id")
+    @SerializedName("credit_id")
 	val creditId: String = "",
 
-	@SerializedName("known_for_department")
+    @SerializedName("known_for_department")
 	val knownForDepartment: String = "",
 
-	@SerializedName("original_name")
+    @SerializedName("original_name")
 	val originalName: String = "",
 
-	@SerializedName("popularity")
+    @SerializedName("popularity")
 	val popularity: Double = 0.0,
 
-	@SerializedName("name")
+    @SerializedName("name")
 	val name: String = "",
 
-	@SerializedName("profile_path")
+    @SerializedName("profile_path")
 	val profilePath: String? = null,
 
-	@SerializedName("adult")
+    @SerializedName("adult")
 	val isAdult: Boolean = false,
 
-	@SerializedName("department")
+    @SerializedName("department")
 	val department: String = "",
 
-	@SerializedName("job")
+    @SerializedName("job")
 	val job: String = ""
 )
 
 data class CastItem(
-	@SerializedName("id")
+    @SerializedName("id")
 	val id: Int = 0,
 
-	@SerializedName("cast_id")
+    @SerializedName("cast_id")
 	val castId: Int = 0,
 
-	@SerializedName("character")
+    @SerializedName("character")
 	val character: String = "",
 
-	@SerializedName("gender")
+    @SerializedName("gender")
 	val gender: Gender = Gender.UNKNOWN,
 
-	@SerializedName("credit_id")
+    @SerializedName("credit_id")
 	val creditId: String = "",
 
-	@SerializedName("known_for_department")
+    @SerializedName("known_for_department")
 	val knownForDepartment: String = "",
 
-	@SerializedName("original_name")
+    @SerializedName("original_name")
 	val originalName: String = "",
 
-	@SerializedName("popularity")
+    @SerializedName("popularity")
 	val popularity: Double = 0.0,
 
-	@SerializedName("name")
+    @SerializedName("name")
 	val name: String = "",
 
-	@SerializedName("profile_path")
+    @SerializedName("profile_path")
 	val profilePath: String? = null,
 
-	@SerializedName("adult")
+    @SerializedName("adult")
 	val isAdult: Boolean = false,
 
-	@SerializedName("order")
+    @SerializedName("order")
 	val order: Int = 0
 )
 
