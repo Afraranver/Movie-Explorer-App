@@ -22,7 +22,7 @@ class SearchPageViewModel @Inject constructor(val useCases: UseCases) : ViewMode
     private val _apiError = mutableStateOf(false)
     val apiError: State<Boolean> = _apiError
 
-    private var _isLoading = mutableStateOf<Boolean>(false)
+    private var _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
     private val _listEmpty = mutableStateOf(false)
@@ -47,7 +47,6 @@ class SearchPageViewModel @Inject constructor(val useCases: UseCases) : ViewMode
                         _isLoading.value = false
 
                     }
-
                     is NetworkResult.Failure -> {
                         _searchMoviePagingItems.clear()
                         _apiError.value = true

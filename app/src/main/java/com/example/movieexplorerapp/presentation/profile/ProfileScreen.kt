@@ -52,7 +52,6 @@ fun ProfileScreen(
     val isDarkTheme = viewModel.isDarkTheme.value
     val context = LocalContext.current
 
-    // State for dialog visibility
     var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -153,10 +152,10 @@ fun ProfileScreen(
 
                     // Navigate to the Auth screen and clear all screens in the back stack
                     navController.navigate(Screen.AuthScreen.route) {
-                        // Pop up everything from the stack
-                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        // Pop everything up to the start destination and include it
+                        popUpTo(0) { inclusive = true }
 
-                        // Ensure the user cannot navigate back to any previous screen
+                        // Avoid recreating the stack by ensuring a single top instance
                         launchSingleTop = true
                         restoreState = false
                     }

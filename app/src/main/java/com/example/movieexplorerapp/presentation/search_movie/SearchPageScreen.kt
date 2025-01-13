@@ -15,18 +15,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -113,16 +109,6 @@ fun SearchPageScreen(
                 // Search item list
                 SearchItemList(viewModel, navController)
 
-                // Loading Animation (e.g., with a fade-in effect)
-                androidx.compose.animation.AnimatedVisibility(visible = viewModel.isLoading.value) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)  // Aligning the progress indicator in the center
-                            .scale(1.5f)  // Scales the progress indicator for better visibility
-                            .alpha(0.7f),  // Adding some transparency for better UX
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
 
                 // Error View with animation
                 androidx.compose.animation.AnimatedVisibility(visible = viewModel.apiError.value) {
